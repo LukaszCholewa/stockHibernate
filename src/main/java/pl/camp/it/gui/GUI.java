@@ -1,10 +1,19 @@
 package pl.camp.it.gui;
 
+import pl.camp.it.dao.ICategoryDAO;
+import pl.camp.it.services.CategoryServices;
+import pl.camp.it.services.ICategoryServices;
+import pl.camp.it.services.IProductServices;
+import pl.camp.it.services.ProductServices;
+import pl.camp.it.session.SessionFactory;
+
 import java.util.Scanner;
 
 public class GUI {
 
     private static final Scanner scanner = new Scanner(System.in);
+    static ICategoryServices iCategoryServices = new CategoryServices();
+    static IProductServices iProductServices = new ProductServices();
 
     public static void showMainMenu() {
 
@@ -22,25 +31,40 @@ public class GUI {
 
         switch (choose) {
             case "1":
-                showProducts();
+                iProductServices.showProducts();
                 break;
             case "2":
-                showProductsByCategory();
+                iProductServices.showProductsByCategory();
                 break;
             case "3":
-                showCategories();
+                iCategoryServices.showCategories();
                 break;
             case "4":
-                addProduct();
+                IProductServices iProductServices = new ProductServices();
+                System.out.println("Wpisz nazwę produktu:");
+                String name = scanner.nextLine();
+                System.out.println("Wpisz ilość:");
+                String amount = scanner.nextLine();
+                System.out.println("Wpisz kod kreskowy:");
+                String barcode = scanner.nextLine();
+                System.out.println("Wpisz kategorię:");
+                String categoryname = scanner.nextLine();
+
+                iProductServices.generateAndSafeProduct(name, amount, barcode, categoryname);
+                System.out.println("Dodano nowy produkt");
                 break;
             case "5":
-                addCategory();
+                ICategoryServices iCategoryServices = new CategoryServices();
+                System.out.println("Wpisz nazwę kategorii:");
+                String newCategory = scanner.nextLine();
+
+                iCategoryServices.generateAndSafeCategory(newCategory);
+                System.out.println("Dodano nową kategorię");
                 break;
             case "6":
-                deleteCategory();
                 break;
             case "7":
-                SQLDb.closeConnection();
+                SessionFactory.sessionFactory.close();
                 System.exit(0);
             default:
                 System.out.println("Nieprawidłowy wybór !!");

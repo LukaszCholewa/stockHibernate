@@ -1,0 +1,13 @@
+/Users/lukaszcholewa/IdeaProjects/StockHibernate/src/main/java/pl/camp/it/services/CategoryServices.java
+/Users/lukaszcholewa/IdeaProjects/StockHibernate/src/main/java/pl/camp/it/dao/ICategoryDAO.java
+/Users/lukaszcholewa/IdeaProjects/StockHibernate/src/main/java/pl/camp/it/services/ICategoryServices.java
+/Users/lukaszcholewa/IdeaProjects/StockHibernate/src/main/java/pl/camp/it/session/SessionFactory.java
+/Users/lukaszcholewa/IdeaProjects/StockHibernate/src/main/java/pl/camp/it/App.java
+/Users/lukaszcholewa/IdeaProjects/StockHibernate/src/main/java/pl/camp/it/services/ProductServices.java
+/Users/lukaszcholewa/IdeaProjects/StockHibernate/src/main/java/pl/camp/it/services/IProductServices.java
+/Users/lukaszcholewa/IdeaProjects/StockHibernate/src/main/java/pl/camp/it/dao/IProductDAO.java
+/Users/lukaszcholewa/IdeaProjects/StockHibernate/src/main/java/pl/camp/it/gui/GUI.java
+/Users/lukaszcholewa/IdeaProjects/StockHibernate/src/main/java/pl/camp/it/model/Category.java
+/Users/lukaszcholewa/IdeaProjects/StockHibernate/src/main/java/pl/camp/it/dao/CategoryDAO.java
+/Users/lukaszcholewa/IdeaProjects/StockHibernate/src/main/java/pl/camp/it/dao/ProductDAO.java
+/Users/lukaszcholewa/IdeaProjects/StockHibernate/src/main/java/pl/camp/it/model/Product.java

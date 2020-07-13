@@ -10,34 +10,27 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false)
-    private String name;
+    private String categoryname;
     private boolean exist;
-    @OneToMany(fetch = FetchType.EAGER)
-    private Set<Product> products = new HashSet<>();
 
     public int getId() { return id; }
 
     public void setId(int id) { this.id = id; }
 
-    public String getName() { return name; }
+    public String getName() { return categoryname; }
 
-    public void setName(String name) { this.name = name; }
+    public void setName(String name) { this.categoryname = name; }
 
     public boolean isExist() { return exist; }
 
     public void setExist(boolean exist) { this.exist = exist; }
 
-    public Set<Product> getProducts() { return products; }
-
-    public void setProducts(Set<Product> products) { this.products = products; }
-
     @Override
     public String toString() {
         return "Category{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + categoryname + '\'' +
                 ", exist=" + exist +
-                ", products=" + products +
                 '}';
     }
 }
