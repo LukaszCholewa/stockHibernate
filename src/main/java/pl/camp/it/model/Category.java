@@ -1,16 +1,15 @@
 package pl.camp.it.model;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
-@Entity(name = "tcategory")
+@Entity (name = "tcategory")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String categoryname;
+    @Column(nullable = false)
     private boolean exist;
 
     public int getId() { return id; }
@@ -24,6 +23,7 @@ public class Category {
     public boolean isExist() { return exist; }
 
     public void setExist(boolean exist) { this.exist = exist; }
+
 
     @Override
     public String toString() {

@@ -1,6 +1,6 @@
 package pl.camp.it.gui;
 
-import pl.camp.it.dao.ICategoryDAO;
+import pl.camp.it.model.Category;
 import pl.camp.it.services.CategoryServices;
 import pl.camp.it.services.ICategoryServices;
 import pl.camp.it.services.IProductServices;
@@ -12,8 +12,8 @@ import java.util.Scanner;
 public class GUI {
 
     private static final Scanner scanner = new Scanner(System.in);
-    static ICategoryServices iCategoryServices = new CategoryServices();
-    static IProductServices iProductServices = new ProductServices();
+    private static ICategoryServices iCategoryServices = new CategoryServices();
+    private static IProductServices iProductServices = new ProductServices();
 
     public static void showMainMenu() {
 
@@ -32,12 +32,15 @@ public class GUI {
         switch (choose) {
             case "1":
                 iProductServices.showProducts();
+                showMainMenu();
                 break;
             case "2":
-                iProductServices.showProductsByCategory();
+                showProductsFromCategoryScreen();
+                showMainMenu();
                 break;
             case "3":
                 iCategoryServices.showCategories();
+                showMainMenu();
                 break;
             case "4":
                 IProductServices iProductServices = new ProductServices();
@@ -54,14 +57,12 @@ public class GUI {
                 System.out.println("Dodano nowy produkt");
                 break;
             case "5":
-                ICategoryServices iCategoryServices = new CategoryServices();
-                System.out.println("Wpisz nazwę kategorii:");
-                String newCategory = scanner.nextLine();
-
-                iCategoryServices.generateAndSafeCategory(newCategory);
-                System.out.println("Dodano nową kategorię");
+                showAddCategoryScreen();
+                showMainMenu();
                 break;
             case "6":
+                showDeleteProductScreen();
+                showMainMenu();
                 break;
             case "7":
                 SessionFactory.sessionFactory.close();
@@ -72,4 +73,48 @@ public class GUI {
                 break;
         }
     }
+
+    public static void showProductsFromCategoryScreen() {
+        System.out.println("Wpisz nazwę kategorii:");
+        String category = scanner.nextLine();
+        if (iCategoryServices.categoryExist(category)) {
+            Category category2 = iCategoryServices.getCategoryByName(category);
+            System.out.println(iProductServices.getProductsByCategory(category2));
+        } else {
+            System.out.println("Nie ma takiej kategorii");
+        }
+    }
+
+    public static void showDeleteProductScreen() {
+        System.out.println("Wpisz nazwę kategorii:");
+        String category = scanner.nextLine();
+        if (category.equals("Brak kategorii")) {
+            System.out.println("Nie można usunąć tej kategorii");
+            return;
+        }
+        if (iCategoryServices.categoryExist(category)) {
+            Category category2 = iCategoryServices.getCategoryByName(category);
+            Category brakKategorii = iCategoryServices.getCategoryByName("Brak kategorii");
+            iProductServices.updateProductCategoryToBrakKategorii(iProductServices.getProductsByCategory(category2),
+                    brakKategorii);
+            iCategoryServices.deleteCategory(category2);
+            System.out.println("Kategoria usunięta, produkty przerzucone do: Brak kategorii");
+        } else {
+            System.out.println("Nie ma takiej kategorii");
+        }
+    }
+
+    public static void showAddCategoryScreen() {
+        System.out.println("Podaj nazwę kategorii:");
+        String name = scanner.nextLine();
+        if (iCategoryServices.categoryExist(name)) {
+            System.out.println("Podana kategoria już istnieje");
+        } else if (iCategoryServices.categoryExistWithDeleted(name)) {
+            System.out.println("Podana kategoria była już wcześniej dodana i została usunięta. Nie można dodać ponownie");
+        } else {
+            iCategoryServices.generateAndSafeCategory(name);
+            System.out.println("Dodano kategorię");
+        }
+    }
+
 }

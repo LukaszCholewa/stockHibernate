@@ -1,12 +1,16 @@
 package pl.camp.it.services;
 
-import pl.camp.it.dao.CategoryDAO;
-import pl.camp.it.dao.ICategoryDAO;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+import pl.camp.it.App;
 import pl.camp.it.dao.IProductDAO;
 import pl.camp.it.dao.ProductDAO;
 import pl.camp.it.model.Category;
 import pl.camp.it.model.Product;
+import pl.camp.it.session.SessionFactory;
 
+import javax.persistence.OneToOne;
+import java.util.List;
 import java.util.Scanner;
 
 import static pl.camp.it.gui.GUI.showMainMenu;
@@ -40,13 +44,38 @@ public class ProductServices implements IProductServices {
     }
 
     @Override
-    public void showProductsByCategory() {
-        System.out.println("Wpisz kategorię:");
-        String category = scanner.nextLine();
+    public void updateProductCategoryToBrakKategorii(List<Product> products, Category brakKategorii) {
 
-        productDAO.getProductsByCategoryName(Integer.parseInt(category));
-
-        showMainMenu();
+        for (Product product : products) {
+            product.setCategory(brakKategorii);
+            productDAO.saveProductToDatabase(product);
+        }
     }
 
+    @Override
+    public void saveProduct(String name, int amount, long barcode, Category category) {
+        Product product = new Product();
+        product.setName(name);
+        product.setAmount(amount);
+        product.setBarcode(barcode);
+        product.setCategory(category);
+
+        productDAO.saveProductToDatabase(product);
+    }
+
+
+    @Override
+    public List<Product> getAllProducts() {
+        return (List<Product>) productDAO.getAllProducts();
+    }
+
+    @Override
+    public List<Product> getProductsByCategory(Category category) {
+        Session session = SessionFactory.sessionFactory.openSession();
+        Query<Product> query = session.createQuery("FROM pl.camp.it.model.Product WHERE category_id = :id");
+        query.setParameter("id", category);
+        List<Product> products = query.getResultList();
+        session.close();
+        return products;
+    }
 }

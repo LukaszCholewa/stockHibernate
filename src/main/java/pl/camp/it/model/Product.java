@@ -12,7 +12,7 @@ public class Product {
     private int amount;
     @Column(unique = true)
     private long barcode;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL)
     private Category category;
 
     public int getId() { return id; }

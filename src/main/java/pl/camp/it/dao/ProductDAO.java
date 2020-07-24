@@ -5,7 +5,8 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import pl.camp.it.model.Product;
 import pl.camp.it.session.SessionFactory;
-import java.util.Set;
+
+import java.util.List;
 
 public class ProductDAO implements IProductDAO{
 
@@ -36,20 +37,30 @@ public class ProductDAO implements IProductDAO{
     }
 
     @Override
-    public Set<Product> getAllProducts(){
+    public List<Product> getAllProducts(){
         Session session = SessionFactory.sessionFactory.openSession();
         Query<Product> query = session.createQuery("FROM pl.camp.it.model.Product");
-       Set<Product> result = (Set<Product>) query.getResultList();
+        List<Product> products = query.getResultList();
+        session.close();
+        return products;
+    }
+
+    @Override
+    public List<Product> getProductsByCategoryName(int id){
+        Session session = SessionFactory.sessionFactory.openSession();
+        Query<Product> query = session.createQuery("FROM pl.camp.it.model.Product WHERE category.id = " + id);
+        List<Product> result = query.getResultList();
         session.close();
         return result;
     }
 
     @Override
-    public Set<Product> getProductsByCategoryName(int id){
+    public List<Product> getProductsByCategoryFromDataBase(int id) {
         Session session = SessionFactory.sessionFactory.openSession();
-        Query<Product> query = session.createQuery("FROM pl.camp.it.model.Product WHERE category.id = " + id);
-        Set<Product> result = (Set<Product>) query.getResultList();
+        Query<Product> query = session.createQuery("FROM pl.camp.it.model.Product WHERE category_id = :id");
+        query.setParameter("id", id);
+        List<Product> products = query.getResultList();
         session.close();
-        return result;
+        return products;
     }
 }

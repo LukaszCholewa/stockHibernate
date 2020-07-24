@@ -5,6 +5,7 @@ import pl.camp.it.dao.ICategoryDAO;
 import pl.camp.it.model.Category;
 import pl.camp.it.model.Product;
 
+import java.util.List;
 import java.util.Scanner;
 
 import static pl.camp.it.gui.GUI.showMainMenu;
@@ -31,18 +32,31 @@ public class CategoryServices implements ICategoryServices {
         showMainMenu();
     }
 
-    /*@Override
-    public void deleteCategory() {
-        System.out.println("Wpisz kategorię:");
-        String category = scanner.nextLine();
-        if(category.equals("Brak kategorii")){
-            System.out.println("Nie można usunąć kategorii !!");
-            deleteCategory();
-        }
+    @Override
+    public Category getCategoryByName(String name) {
+        return categoryDAO.getCategoryFromDataBase(name);
+    }
+
+    @Override
+    public List<Category> GetAllCategories() {
+
+        return (List<Category>) categoryDAO.getAllCategories();
+    }
+
+    @Override
+    public void deleteCategory(Category category) {
+        category.setExist(true);
         categoryDAO.deleteCategoryFromDataBase(category);
+    }
 
-            System.out.println("Kategoria została usunięta");
-        showMainMenu();
-    }*/
+    @Override
+    public boolean categoryExist(String category) {
 
+        return categoryDAO.checkCategoryInDataBase(category);
+    }
+
+    @Override
+    public boolean categoryExistWithDeleted(String category) {
+        return categoryDAO.checkCategoryInDataBaseWithDeleted(category);
+    }
 }

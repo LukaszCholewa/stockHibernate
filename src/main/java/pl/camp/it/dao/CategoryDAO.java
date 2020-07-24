@@ -6,7 +6,7 @@ import org.hibernate.query.Query;
 import pl.camp.it.model.Category;
 import pl.camp.it.session.SessionFactory;
 
-import java.util.Set;
+import java.util.List;
 
 public class CategoryDAO implements ICategoryDAO{
 
@@ -21,10 +21,10 @@ public class CategoryDAO implements ICategoryDAO{
     }
 
     @Override
-    public Set<Category> getAllCategories(){
+    public List<Category> getAllCategories(){
         Session session = SessionFactory.sessionFactory.openSession();
         Query<Category> query = session.createQuery("From pl.camp.it.model.Category");
-        Set<Category> result = (Set<Category>) query.getResultList();
+        List<Category> result = (List<Category>) query.getResultList();
         session.close();
         return result;
     }
@@ -47,7 +47,7 @@ public class CategoryDAO implements ICategoryDAO{
     }
 
     @Override
-    public void deleteCategoryFromDataBase(String category){
+    public void deleteCategoryFromDataBase(Category category){
         Session session = SessionFactory.sessionFactory.openSession();
         Transaction tx = null;
         try{
@@ -61,5 +61,44 @@ public class CategoryDAO implements ICategoryDAO{
         }finally {
             session.close();
         }
+    }
+
+    @Override
+    public boolean checkCategoryInDataBase(String category) {
+        for (Category category2 : getAllCategories()) {
+            if (category2.getName().equals(category)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkCategoryInDataBaseWithDeleted(String category) {
+        for (Category category2 : getAllCategoriesFromDataBaseWithDeleted()) {
+            if (category2.getName().equals(category)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Category getCategoryFromDataBase(String name) {
+        Session session = SessionFactory.sessionFactory.openSession();
+        Query<Category> query = session.createQuery("FROM pl.camp.it.model.Category WHERE name = :name");
+        query.setParameter("name", name);
+        Category tempCategory = query.getSingleResult();
+        session.close();
+        return tempCategory;
+    }
+
+    @Override
+    public List<Category> getAllCategoriesFromDataBaseWithDeleted() {
+        Session session = SessionFactory.sessionFactory.openSession();
+        Query<Category> query = session.createQuery("FROM pl.camp.it.model.Category");
+        List<Category> categories = query.getResultList();
+        session.close();
+        return categories;
     }
 }
