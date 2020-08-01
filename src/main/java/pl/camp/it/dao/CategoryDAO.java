@@ -52,7 +52,7 @@ public class CategoryDAO implements ICategoryDAO{
         Transaction tx = null;
         try{
             tx = session.beginTransaction();
-            session.delete(category);
+            session.saveOrUpdate(category);
             tx.commit();
         } catch(Exception e){
             if(tx != null) {
@@ -86,7 +86,7 @@ public class CategoryDAO implements ICategoryDAO{
     @Override
     public Category getCategoryFromDataBase(String name) {
         Session session = SessionFactory.sessionFactory.openSession();
-        Query<Category> query = session.createQuery("FROM pl.camp.it.model.Category WHERE name = :name");
+        Query<Category> query = session.createQuery("FROM pl.camp.it.model.Category WHERE categoryname = :name");
         query.setParameter("name", name);
         Category tempCategory = query.getSingleResult();
         session.close();

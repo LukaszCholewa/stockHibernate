@@ -102,6 +102,7 @@ public class GUI {
         } else {
             System.out.println("Nie ma takiej kategorii");
         }
+        GUI.showMainMenu();
     }
 
     public static void showAddCategoryScreen() {
